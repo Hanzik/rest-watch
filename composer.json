@@ -1,0 +1,46 @@
+{
+	"name": "efpa/efpa",
+	"description": "Rest.cz",
+	"homepage": "http://rest-watch.cz",
+	"type": "project",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Jan Vrátník",
+			"email": "jan.vratnik@scalesoft.cz"
+		}
+	],
+	"require": {
+		"php": ">= 7.1",
+		"nette/application": "^2.4",
+		"nette/bootstrap": "^2.4.2",
+		"nette/caching": "^2.5",
+		"nette/database": "^2.4",
+		"nette/di": "^2.4",
+		"nette/finder": "^2.4",
+		"nette/forms": "^2.4",
+		"nette/http": "^2.4",
+		"nette/mail": "^2.4",
+		"nette/robot-loader": "^2.4 || ^3.0",
+		"nette/security": "^2.4",
+		"nette/utils": "^2.4",
+		"latte/latte": "^2.4",
+		"tracy/tracy": "^2.4",
+
+		"nextras/migrations": "^3.0",
+		"guzzlehttp/guzzle": "^6.3",
+		"kdyby/doctrine": "^3.2",
+		"doctrine/orm": "2.5.6",
+
+		"drahak/restful": "dev-master",
+		"zircote/swagger-php": "^2.0"
+	},
+	"require-dev": {
+		"nette/tester": "^2.0"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"optimize-autoloader": true
+	}
+}

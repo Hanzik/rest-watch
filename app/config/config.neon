@@ -1,0 +1,28 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+	migration:
+		dir: '%appDir%/database/migrations'
+		phpParams:
+			em: @Kdyby\Doctrine\EntityManager
+			container: @Nette\DI\Container
+	database:
+		unix_socket: null
+
+includes:
+	- extensions.neon
+	- repositories.neon
+	- services.neon
+
+php:
+	date.timezone: Europe/Prague
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+	scanComposer: FALSE

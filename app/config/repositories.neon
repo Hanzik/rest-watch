@@ -1,0 +1,5 @@
+services:
+	- App\Model\Entity\Fountain\FountainRepository
+	- App\Model\Entity\Fountain\FountainService
+	- App\Model\Entity\Watch\WatchRepository
+	- App\Model\Entity\Watch\WatchService
