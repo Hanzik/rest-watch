@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-trait EntityTimestampTrait
+trait php
 {
 	/**
 	 * @var \DateTime

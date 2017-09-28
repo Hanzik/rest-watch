@@ -15,7 +15,7 @@ use Kdyby;
 class Watch
 {
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;
-	use Entity\EntityTimestampTrait;
+	use Entity\php;
 
 	/**
 	 * @var string
@@ -91,7 +91,7 @@ class Watch
 	 *
 	 * @return $this
 	 */
-	public function setPrice(int $price) : Watch
+	public function setPrice(int $price): Watch
 	{
 		$this->price = $price;
 
@@ -103,7 +103,7 @@ class Watch
 	 *
 	 * @return $this
 	 */
-	public function setDescription(string $description) : Watch
+	public function setDescription(string $description): Watch
 	{
 		$this->description = $description;
 
@@ -115,11 +115,21 @@ class Watch
 	 *
 	 * @return $this
 	 */
-	public function setFountain(Entity\Fountain\Fountain $fountain) : Watch
+	public function setFountain(Entity\Fountain\Fountain $fountain): Watch
 	{
 		$this->fountains->clear();
 		$this->fountains->add($fountain);
 
 		return $this;
+	}
+
+	public function serialize() : array
+	{
+		return [
+			'title' => $this->getTitle(),
+			'price' => $this->getPrice(),
+			'description' => $this->getDescription(),
+			'fountain' => $this->getFountain()->serialize()
+		];
 	}
 }

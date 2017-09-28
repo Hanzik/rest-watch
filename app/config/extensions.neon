@@ -1,8 +1,8 @@
 extensions:
 	drahak.restful: Drahak\Restful\DI\RestfulExtension
 	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
-	kdyby.events: Kdyby\Events\DI\EventsExtension
 	kdyby.doctrine: Kdyby\Doctrine\DI\OrmExtension
+	kdyby.events: Kdyby\Events\DI\EventsExtension
 	nextras.migrations: Nextras\Migrations\Bridges\NetteDI\MigrationsExtension
 
 kdyby.doctrine:

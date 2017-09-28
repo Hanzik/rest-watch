@@ -2,10 +2,8 @@
 
 namespace App\ApiModule\Presenters;
 
-use Doctrine\ORM\NoResultException;
-use Drahak;
 use App;
-use Trejjam;
+use Drahak;
 
 /**
  * @SWG\Swagger(
@@ -26,6 +24,9 @@ abstract class BaseApiPresenter extends Drahak\Restful\Application\UI\ResourcePr
 {
 	const VERSION = '1.0';
 
+	const DEFAULT_PAGE = 0;
+	const DEFAULT_PAGE_SIZE = 20;
+
 	/** Format of response data - JSON and XML should be supported. */
 	const CONTENT_TYPE = Drahak\Restful\IResource::JSON;
 
@@ -38,5 +39,4 @@ abstract class BaseApiPresenter extends Drahak\Restful\Application\UI\ResourcePr
 	{
 		$this->sendErrorResource($e, self::CONTENT_TYPE);
 	}
-
 }

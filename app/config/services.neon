@@ -1,2 +1,11 @@
 services:
 	router: App\Router\RouterFactory
+
+	kdyby.doctrine.default.entityManager:
+		arguments:
+			- @kdyby.doctrine.default.connection
+			- @kdyby.doctrine.default.ormConfiguration
+			- @kdyby.doctrine.default.evm
+
+	drahak.restful.methodHandler:
+		class: App\Model\Restful\MethodHandler('/api')

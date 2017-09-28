@@ -2,6 +2,7 @@
 
 namespace App\Router;
 
+use App;
 use Drahak\Restful;
 use Nette;
 
@@ -17,16 +18,19 @@ class RouterFactory extends Nette\Application\Routers\RouteList
 		parent::__construct();
 
 		$this->rootPath = $rootPath;
+		$this[] = new Nette\Application\Routers\Route($rootPath . '[/<presenter>[/<action>[/<id>]]]', 'Homepage:default');
 		$this->setupApiRoute();
 	}
 
 	private function setupApiRoute()
 	{
 		/** Info resources */
-		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . 'api/v1/info', 'Info', Restful\Application\IResourceRouter::GET);
+		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/info', 'Info', Restful\Application\IResourceRouter::GET);
 
-		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . 'api/v1/watch[/<id>[/<relation>]]', 'Watch', Restful\Application\IResourceRouter::GET);
-		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . 'api/v1/watch', 'Watch', Restful\Application\IResourceRouter::POST);
-		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . 'api/v1/watch/<id>', 'Watch', Restful\Application\IResourceRouter::DELETE);
+		$this[] = $api = new App\Model\PrefixedRouteList('/api', 'Api');
+
+		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches[/<id>]', 'Watches', Restful\Application\IResourceRouter::GET);
+		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches', 'Watches', Restful\Application\IResourceRouter::POST);
+		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches/<id>', 'Watches', Restful\Application\IResourceRouter::DELETE);
 	}
 }

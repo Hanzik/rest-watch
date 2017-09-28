@@ -6,7 +6,7 @@ use App;
 use Drahak;
 use Nette;
 
-final class WatchPresenter extends BaseApiPresenter
+final class WatchesPresenter extends BaseApiPresenter
 {
 	/**
 	 * @var App\Model\Entity\Watch\WatchRepository @inject
@@ -15,10 +15,9 @@ final class WatchPresenter extends BaseApiPresenter
 
 	public function actionRead($id = NULL)
 	{
-		$this->resource->watches = is_null($id) ? $this->readAll() : $this->readOne($id);
+		$this->resource = is_null($id) ? $this->readAll() : $this->readOne($id);
 		$this->sendResource(self::CONTENT_TYPE);
 	}
-
 
 	/**
 	 * @SWG\Get(path="/watches",
@@ -48,18 +47,20 @@ final class WatchPresenter extends BaseApiPresenter
 	private function readAll()
 	{
 		try {
+			$query = $this->getHttpRequest()->getQuery();
+			$page = $this->getHttpRequest()->getQuery('page', self::DEFAULT_PAGE);
+			$pageSize = $this->getHttpRequest()->getQuery('page', self::DEFAULT_PAGE_SIZE);
 			// TODO validate query
 
 			$data = [];
-			foreach ($this->watchRepository->findByFilter($this->getHttpRequest()->getQuery()) as $watch) {
-				$data[] = $this->serializeWatchData($watch);
+			foreach ($this->watchRepository->findByFilter($query, $page, $pageSize) as $watch) {
+				$data[] = $watch->serialize();
 			}
+			return $data;
 		}
 		catch (App\Model\InvalidArgumentException $e) {
-			$this->sendErrorResponse(new Drahak\Restful\Application\BadRequestException('Invalid parameter', Nette\Http\IResponse::S400_BAD_REQUEST, $e));
+			$this->sendErrorResponse(new Drahak\Restful\Application\BadRequestException('Invalid filter parameter', Nette\Http\IResponse::S400_BAD_REQUEST, $e));
 		}
-
-		return $data;
 	}
 
 
@@ -79,14 +80,11 @@ final class WatchPresenter extends BaseApiPresenter
 	 */
 	private function readOne(int $id)
 	{
-		$watch = NULL;
 		try {
-			$watch = $this->watchRepository->getById($id);
-			return $this->serializeWatchData($watch);
+			return $this->watchRepository->getById($id)->serialize();
 		}
 		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
 			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));
 		}
-
 	}
 }

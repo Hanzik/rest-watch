@@ -49,7 +49,7 @@ class Fountain
 	/**
 	 * @return string
 	 */
-	public function getImageBase64(): string
+	public function getImageBase64(): ?string
 	{
 		return $this->imageBase64;
 	}
@@ -57,7 +57,7 @@ class Fountain
 	/**
 	 * @return string
 	 */
-	public function getColor(): string
+	public function getColor(): ?string
 	{
 		return $this->color;
 	}
@@ -65,7 +65,7 @@ class Fountain
 	/**
 	 * @return string
 	 */
-	public function getHeight(): string
+	public function getHeight(): ?string
 	{
 		return $this->height;
 	}
@@ -124,5 +124,17 @@ class Fountain
 		$this->watch = $watch;
 
 		return $this;
+	}
+
+	public function serialize()
+	{
+		if (is_null($this->getImageBase64())) {
+			return $this->getImageBase64();
+		}
+
+		return [
+			'color'  => $this->getColor(),
+			'height' => $this->getHeight()
+		];
 	}
 }
