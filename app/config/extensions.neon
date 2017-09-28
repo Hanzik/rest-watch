@@ -3,7 +3,6 @@ extensions:
 	kdyby.annotations: Kdyby\Annotations\DI\AnnotationsExtension
 	kdyby.doctrine: Kdyby\Doctrine\DI\OrmExtension
 	kdyby.events: Kdyby\Events\DI\EventsExtension
-	nextras.migrations: Nextras\Migrations\Bridges\NetteDI\MigrationsExtension
 
 kdyby.doctrine:
 	metadata:
@@ -110,11 +109,6 @@ kdyby.annotations:
         - SWG\Info
         - SWG\Contact
         - SWG\ExternalDocumentation
-
-nextras.migrations:
-	dir: '%migration.dir%'	# migrations base directory
-	driver: mysql						# pgsql or mysql
-	dbal: doctrine						# nextras, nette, doctrine or dibi
 
 drahak.restful:
 	convention: 'snake_case'

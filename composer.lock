@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4fff703ac35cb934acbf440d4c5fd443",
-    "content-hash": "4a9e32c83f1756c2be82a2e89708578a",
+    "hash": "8957f7ad5c8b9d4d4ca103c1544db49e",
+    "content-hash": "8662b9a1e35c71a57fd92cd081713456",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2401,62 +2401,6 @@
                 "validation"
             ],
             "time": "2017-08-20 17:32:29"
-        },
-        {
-            "name": "nextras/migrations",
-            "version": "v3.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nextras/migrations.git",
-                "reference": "b84f500699c64bfe7de9ac0bb4c608b757fe2e55"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nextras/migrations/zipball/b84f500699c64bfe7de9ac0bb4c608b757fe2e55",
-                "reference": "b84f500699c64bfe7de9ac0bb4c608b757fe2e55",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "dibi/dibi": "~2.3",
-                "doctrine/dbal": "~2.5",
-                "ext-openssl": "*",
-                "mockery/mockery": "~0.9",
-                "nette/database": "~2.2",
-                "nette/di": "~2.3.12 | ~2.4",
-                "nette/tester": "~1.4",
-                "nette/utils": "~2.3",
-                "nextras/dbal": "~1.0 | ~2.0",
-                "symfony/console": "~2.6 | ~3.0"
-            },
-            "suggest": {
-                "dibi/dibi": "to use DibiAdapter",
-                "nette/database": "to use NetteAdapter",
-                "nextras/dbal": "to use NextrasAdapter"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nextras\\Migrations\\": "src/"
-                },
-                "classmap": [
-                    "src/exceptions.php",
-                    "src/deprecated"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Database migrations runner",
-            "time": "2017-07-28 18:19:10"
         },
         {
             "name": "psr/http-message",

@@ -3,7 +3,6 @@
 namespace App\ApiModule\Presenters;
 
 use Drahak;
-use Nette;
 
 final class InfoPresenter extends BaseApiPresenter
 {
@@ -22,7 +21,7 @@ final class InfoPresenter extends BaseApiPresenter
 		$this->resource = [
 			'version'   => BaseApiPresenter::VERSION,
 			'resources' => [
-				'name' => 'watches'
+				'watches'
 			]
 		];
 		$this->sendResource(self::CONTENT_TYPE);

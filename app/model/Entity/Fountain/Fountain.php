@@ -11,6 +11,7 @@ use Kdyby;
 class Fountain
 {
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;
+	use Entity\EntityTimestampTrait;
 
 	/**
 	 * @var string

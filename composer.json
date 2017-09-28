@@ -27,7 +27,6 @@
 		"latte/latte": "^2.4",
 		"tracy/tracy": "^2.4",
 
-		"nextras/migrations": "^3.0",
 		"guzzlehttp/guzzle": "^6.3",
 		"kdyby/doctrine": "^3.2",
 		"doctrine/orm": "2.5.6",

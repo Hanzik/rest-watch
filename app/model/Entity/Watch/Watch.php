@@ -15,12 +15,12 @@ use Kdyby;
 class Watch
 {
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;
-	use Entity\php;
+	use Entity\EntityTimestampTrait;
 
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="title", type="text", length=128, nullable=false)
+	 * @ORM\Column(name="title", type="text", length=256, nullable=false)
 	 */
 	private $title;
 	/**

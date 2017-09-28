@@ -1,9 +1,4 @@
 parameters:
-	migration:
-		dir: '%appDir%/database/migrations'
-		phpParams:
-			em: @Kdyby\Doctrine\EntityManager
-			container: @Nette\DI\Container
 	database:
 		unix_socket: null
 

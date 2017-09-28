@@ -25,9 +25,10 @@ class RouterFactory extends Nette\Application\Routers\RouteList
 	private function setupApiRoute()
 	{
 		/** Info resources */
-		$this[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/info', 'Info', Restful\Application\IResourceRouter::GET);
 
 		$this[] = $api = new App\Model\PrefixedRouteList('/api', 'Api');
+
+		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/info', 'Info', Restful\Application\IResourceRouter::GET);
 
 		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches[/<id>]', 'Watches', Restful\Application\IResourceRouter::GET);
 		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches', 'Watches', Restful\Application\IResourceRouter::POST);
