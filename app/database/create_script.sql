@@ -12,9 +12,6 @@ CREATE TABLE `watches` (
 
 CREATE TABLE `fountains` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL,
-  `date_removed` datetime NULL,
   `image_base64` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
   `color` varchar(32) COLLATE 'utf8mb4_unicode_ci' NULL,
   `height` varchar(32) COLLATE 'utf8mb4_unicode_ci' NULL,

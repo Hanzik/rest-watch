@@ -4,9 +4,9 @@ namespace App\Model\Entity;
 
 use Doctrine;
 
-trait PaginatorTrait
+trait PaginationTrait
 {
-	private function setPage(Doctrine\ORM\QueryBuilder &$query, $page = NULL, $perPage = NULL)
+	private function setPage(Doctrine\ORM\QueryBuilder &$query, ?int $page, ?int $perPage)
 	{
 		if (is_null($page) && is_null($perPage)) {
 			return;

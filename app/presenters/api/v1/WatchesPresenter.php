@@ -13,9 +13,68 @@ final class WatchesPresenter extends BaseApiPresenter
 	 */
 	public $watchRepository;
 
-	public function actionRead($id = NULL)
+	/**
+	 * @SWG\Post(path="/watches",
+	 *   tags={"watches"},
+	 *   summary="Creates a new watch",
+	 *   description="Creates a new watch with parameters included in the query.",
+	 *   operationId="createWatch",
+	 *   produces={"application/json"},
+	 *   @SWG\Parameter(
+	 *     paramType="body",
+	 *     name="title",
+	 *     description="Watch title (required)",
+	 *     required=true,
+	 *     type="string"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     paramType="body",
+	 *     name="price",
+	 *     description="Watch integer price (required)",
+	 *     required=true,
+	 *     type="integer"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     paramType="body",
+	 *     name="description",
+	 *     description="Watch description (required)",
+	 *     required=true,
+	 *     type="string"
+	 *   ),
+	 *   @SWG\Parameter(
+	 *     paramType="body",
+	 *     name="fountain",
+	 *     description="Fountain - either an object with parameters color and height or a string (image in base64)",
+	 *     required=true,
+	 *     type="object"
+	 *   ),
+	 *   @SWG\Response(response="201", description="All necessary fields were provided and watch was successfully
+	 *                                 created."),
+	 *   @SWG\Response(response="400", description="Malformed syntax or some required parameters were not provided.")
+	 * )
+	 */
+	public function actionCreate()
 	{
-		$this->resource = is_null($id) ? $this->readAll() : $this->readOne($id);
+		try {
+			$watchDto = new App\Model\DTO\WatchDTO($this->requestBody);
+
+			$this->watchRepository->create($watchDto->getTitle(), $watchDto->getPrice(), $watchDto->getDescription(), $watchDto->getFountainDto());
+			$this->resource->code = Nette\Http\IResponse::S201_CREATED;
+			$this->sendResource(self::CONTENT_TYPE);
+		}
+		catch (\Exception $e) {
+			$this->sendErrorResponse(new Nette\Application\BadRequestException($e->getMessage(), Nette\Http\IResponse::S400_BAD_REQUEST));
+		}
+	}
+
+	public function actionRead(?int $id)
+	{
+		if (is_null($id)) {
+			$this->readAll();
+		}
+		else {
+			$this->readOne($id);
+		}
 		$this->sendResource(self::CONTENT_TYPE);
 	}
 
@@ -27,20 +86,21 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="readAllWatches",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     in="query",
+	 *     paramType="query",
 	 *     name="page",
 	 *     description="Displayed page of the watch list. If the page is out of range, empty array will be returned.",
 	 *     required=false,
 	 *     type="integer"
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     in="query",
+	 *     paramType="query",
 	 *     name="per_page",
 	 *     description="Items per page. This parameter works only when 'page' parameter is also included.",
 	 *     required=false,
 	 *     type="integer"
 	 *   ),
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be expected."),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
+	 *                                 expected."),
 	 *   @SWG\Response(response="400", description="One or more filter parameters are not in correct format.")
 	 * )
 	 */
@@ -49,14 +109,14 @@ final class WatchesPresenter extends BaseApiPresenter
 		try {
 			$query = $this->getHttpRequest()->getQuery();
 			$page = $this->getHttpRequest()->getQuery('page', self::DEFAULT_PAGE);
-			$pageSize = $this->getHttpRequest()->getQuery('page', self::DEFAULT_PAGE_SIZE);
+			$pageSize = $this->getHttpRequest()->getQuery('per_page', self::DEFAULT_PAGE_SIZE);
 			// TODO validate query
 
 			$data = [];
 			foreach ($this->watchRepository->findByFilter($query, $page, $pageSize) as $watch) {
 				$data[] = $watch->serialize();
 			}
-			return $data;
+			$this->resource->watches = $data;
 		}
 		catch (App\Model\InvalidArgumentException $e) {
 			$this->sendErrorResponse(new Drahak\Restful\Application\BadRequestException('Invalid filter parameter', Nette\Http\IResponse::S400_BAD_REQUEST, $e));
@@ -71,7 +131,15 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   description="Returns information about watch with given identifier.",
 	 *   operationId="readOneWatch",
 	 *   produces={"application/json"},
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be expected."),
+	 *   @SWG\Parameter(
+	 *     paramType="path",
+	 *     name="id",
+	 *     description="Watch unique identifier.",
+	 *     required=true,
+	 *     type="integer"
+	 *   ),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
+	 *                                 expected."),
 	 *   @SWG\Response(response="404", description="Item with given identifier does not exist.")
 	 * )
 	 * @param $id
@@ -81,7 +149,7 @@ final class WatchesPresenter extends BaseApiPresenter
 	private function readOne(int $id)
 	{
 		try {
-			return $this->watchRepository->getById($id)->serialize();
+			$this->resource = $this->watchRepository->getById($id)->serialize();
 		}
 		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
 			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));

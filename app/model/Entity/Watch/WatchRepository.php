@@ -3,25 +3,31 @@
 namespace App\Model\Entity\Watch;
 
 use App\Model\Entity;
+use App\Model\DTO;
 use Doctrine;
 use Kdyby\Doctrine\EntityManager;
 
 class WatchRepository
 {
-	use Entity\PaginatorTrait;
+	use Entity\PaginationTrait;
 
 	/**
 	 * @var EntityManager
 	 */
 	private $em;
 	/**
+	 * @var Entity\Fountain\FountainService
+	 */
+	private $fountainService;
+	/**
 	 * @var WatchService
 	 */
 	private $watchService;
 
-	public function __construct(EntityManager $em, WatchService $watchService)
+	public function __construct(EntityManager $em, Entity\Fountain\FountainService $fountainService, WatchService $watchService)
 	{
 		$this->em = $em;
+		$this->fountainService = $fountainService;
 		$this->watchService = $watchService;
 	}
 
@@ -37,7 +43,8 @@ class WatchRepository
 			$query = $this->em->createQueryBuilder()
 							  ->select('watch')
 							  ->from(Watch::class, 'watch')
-							  ->andWhere('watch.id = :id')->setParameter('id', $id);
+							  ->andWhere('watch.id = :id')->setParameter('id', $id)
+							  ->andWhere('watch.dateRemoved IS NOT NULL');
 
 			return $query->getQuery()->getSingleResult();
 		}
@@ -49,17 +56,18 @@ class WatchRepository
 	/**
 	 * @param array    $filter
 	 * @param int|null $page
-	 * @param null     $perPage
+	 * @param int|null $perPage
 	 *
 	 * @return Watch[]
 	 * @throws WatchNotFoundException
 	 */
-	public function findByFilter(array $filter, int $page = NULL, $perPage = NULL)
+	public function findByFilter(array $filter, ?int $page, ?int $perPage)
 	{
 		try {
 			$query = $this->em->createQueryBuilder()
 							  ->select('watch')
-							  ->from(Watch::class, 'watch');
+							  ->from(Watch::class, 'watch')
+							  ->andWhere('watch.dateRemoved IS NOT NULL');
 
 			// TODO: apply filters
 			$this->setPage($query, $page, $perPage);
@@ -68,6 +76,70 @@ class WatchRepository
 		}
 		catch (Doctrine\ORM\NoResultException $e) {
 			throw new WatchNotFoundException;
+		}
+	}
+
+	//////////////////////
+	/// write
+
+	public function create(string $title, int $price, string $description, DTO\FountainDTO $fountainDto)
+	{
+		$this->em->beginTransaction();
+		try {
+			$fountain = $this->fountainService->create($fountainDto->getImageBase64(), $fountainDto->getColor(), $fountainDto->getHeight());
+			$watch = $this->watchService->create($title, $price, $description, $fountain);
+
+			$this->em->persist($fountain);
+			$this->em->persist($watch);
+			$this->em->flush();
+
+			$this->em->commit();
+
+			return $watch;
+		}
+		catch (\Exception $e) {
+			$this->em->rollback();
+			throw $e;
+		}
+	}
+
+
+	public function update(string $title, int $price, string $description, DTO\FountainDTO $fountainDto)
+	{
+		$this->em->beginTransaction();
+		try {
+			$fountain = $this->fountainService->create($fountainDto->getImageBase64(), $fountainDto->getColor(), $fountainDto->getHeight());
+			$watch = $this->watchService->create($title, $price, $description, $fountain);
+
+			$this->em->persist($fountain);
+			$this->em->persist($watch);
+			$this->em->flush();
+
+			$this->em->commit();
+
+			return $watch;
+		}
+		catch (\Exception $e) {
+			$this->em->rollback();
+			throw $e;
+		}
+	}
+
+	public function delete(Watch $watch)
+	{
+		$this->em->beginTransaction();
+		try {
+			$watch->setDateRemoved();
+
+			$this->em->flush($watch);
+
+			$this->em->commit();
+
+			return $watch;
+		}
+		catch (\Exception $e) {
+			$this->em->rollback();
+			throw $e;
 		}
 	}
 }

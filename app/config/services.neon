@@ -1,3 +1,8 @@
+decorator:
+	App\ApiModule\Presenters\BaseApiPresenter:
+		setup:
+			- injectDecoder(@decoderJson)
+
 services:
 	router: App\Router\RouterFactory
 
@@ -9,3 +14,10 @@ services:
 
 	drahak.restful.methodHandler:
 		class: App\Model\Restful\MethodHandler('/api')
+
+	decoderJson:
+		class: App\Model\Decoder\JsonDecoder
+		autowired: false
+	decoderXml:
+		class: App\Model\Decoder\XmlDecoder
+		autowired: false

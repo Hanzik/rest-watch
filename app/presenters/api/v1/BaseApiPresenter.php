@@ -4,6 +4,7 @@ namespace App\ApiModule\Presenters;
 
 use App;
 use Drahak;
+use Nette\Http\IRequest;
 
 /**
  * @SWG\Swagger(
@@ -30,9 +31,27 @@ abstract class BaseApiPresenter extends Drahak\Restful\Application\UI\ResourcePr
 	/** Format of response data - JSON and XML should be supported. */
 	const CONTENT_TYPE = Drahak\Restful\IResource::JSON;
 
+	/**
+	 * @var App\Model\Decoder\IDecoder
+	 */
+	private $decoder;
+	/**
+	 * @var array
+	 */
+	protected $requestBody;
+
+	public function injectDecoder(App\Model\Decoder\IDecoder $decoder)
+	{
+		$this->decoder = $decoder;
+	}
+
 	public function startup()
 	{
 		parent::startup();
+
+		if (in_array($this->getHttpRequest()->getMethod(), [IRequest::POST, IRequest::PUT])) {
+			$this->requestBody = $this->decoder->decode(file_get_contents('php://input'));
+		}
 	}
 
 	protected function sendErrorResponse($e)

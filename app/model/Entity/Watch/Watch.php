@@ -14,6 +14,8 @@ use Kdyby;
  */
 class Watch
 {
+	const TITLE_MAX_LENGTH = 256;
+
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;
 	use Entity\EntityTimestampTrait;
 
@@ -43,16 +45,20 @@ class Watch
 	private $fountains;
 
 	/**
-	 * @param string $title
-	 * @param        $price
-	 * @param        $description
+	 * @param string                   $title
+	 * @param int                      $price
+	 * @param string                   $description
+	 * @param Entity\Fountain\Fountain $fountain
 	 */
-	public function __construct(string $title, int $price, string $description)
+	public function __construct(string $title, int $price, string $description, Entity\Fountain\Fountain $fountain)
 	{
 		$this->title = $title;
 		$this->price = $price;
 		$this->description = $description;
+
 		$this->fountains = new Doctrine\Common\Collections\ArrayCollection;
+
+		$this->setFountain($fountain);
 	}
 
 	public function getTitle(): string

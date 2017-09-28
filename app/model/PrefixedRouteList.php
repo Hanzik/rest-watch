@@ -18,7 +18,7 @@ class PrefixedRouteList extends Nette\Application\Routers\RouteList
 	 * @param string $prefix
 	 * @param string $module
 	 */
-	public function __construct($prefix, $module = NULL)
+	public function __construct($prefix, ?string $module)
 	{
 		parent::__construct($module);
 

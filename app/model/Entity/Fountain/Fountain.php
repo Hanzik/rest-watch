@@ -11,7 +11,6 @@ use Kdyby;
 class Fountain
 {
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;
-	use Entity\EntityTimestampTrait;
 
 	/**
 	 * @var string
@@ -40,11 +39,15 @@ class Fountain
 	private $watch;
 
 	/**
-	 * @param Entity\Watch\Watch $watch
+	 * @param string $imageBase64
+	 * @param string $color
+	 * @param string $height
 	 */
-	public function __construct(Entity\Watch\Watch $watch)
+	public function __construct(?string $imageBase64, ?string $color, ?string $height)
 	{
-		$this->watch = $watch;
+		$this->imageBase64 = $imageBase64;
+		$this->color = $color;
+		$this->height = $height;
 	}
 
 	/**
@@ -125,17 +128,5 @@ class Fountain
 		$this->watch = $watch;
 
 		return $this;
-	}
-
-	public function serialize()
-	{
-		if (is_null($this->getImageBase64())) {
-			return $this->getImageBase64();
-		}
-
-		return [
-			'color'  => $this->getColor(),
-			'height' => $this->getHeight()
-		];
 	}
 }
