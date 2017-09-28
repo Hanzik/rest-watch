@@ -8,6 +8,10 @@ use Doctrine;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby;
 
+/**
+ * @ORM\Table(name="fountains")
+ * @ORM\Entity
+ */
 class Fountain
 {
 	use Kdyby\Doctrine\Entities\Attributes\Identifier;

@@ -4,7 +4,7 @@ namespace App\Model\DTO;
 
 use App;
 
-class FountainDTO implements IDTO
+class FountainDTO extends BaseDTO implements IDTO
 {
 	/**
 	 * @var string
@@ -90,5 +90,19 @@ class FountainDTO implements IDTO
 			'color'  => $this->getColor(),
 			'height' => $this->getHeight()
 		];
+	}
+
+	public static function createFromEntity(App\Model\Entity\Fountain\Fountain $fountain)
+	{
+		if (is_null($fountain->getImageBase64())) {
+			return new FountainDTO(
+				[
+					'color'  => $fountain->getColor(),
+					'height' => $fountain->getHeight()
+				]
+			);
+		}
+
+		return new FountainDTO($fountain->getImageBase64());
 	}
 }

@@ -26,7 +26,7 @@ class Watch
 	 */
 	private $title;
 	/**
-	 * @var integer
+	 * @var int
 	 *
 	 * @ORM\Column(name="price", type="integer", nullable=false)
 	 */
@@ -52,6 +52,8 @@ class Watch
 	 */
 	public function __construct(string $title, int $price, string $description, Entity\Fountain\Fountain $fountain)
 	{
+		$this->setDateCreated();
+
 		$this->title = $title;
 		$this->price = $price;
 		$this->description = $description;
@@ -125,17 +127,8 @@ class Watch
 	{
 		$this->fountains->clear();
 		$this->fountains->add($fountain);
+		$fountain->setWatch($this);
 
 		return $this;
-	}
-
-	public function serialize() : array
-	{
-		return [
-			'title' => $this->getTitle(),
-			'price' => $this->getPrice(),
-			'description' => $this->getDescription(),
-			'fountain' => $this->getFountain()->serialize()
-		];
 	}
 }

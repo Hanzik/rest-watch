@@ -4,38 +4,39 @@ namespace App\Model\DTO;
 
 use App;
 
-class WatchDTO implements IDTO
+class WatchDTO extends BaseDTO implements IDTO
 {
 	/**
 	 * @var string
 	 */
-	private $title;
+	protected $title;
 	/**
-	 * @var integer
+	 * @var int
 	 */
-	private $price;
+	protected $price;
 	/**
 	 * @var string
 	 */
-	private $description;
+	protected $description;
 	/**
 	 * @var FountainDTO
 	 */
-	private $fountainDto;
+	protected $fountainDto;
 
 	private $params;
 
-	public function __construct(array $data = NULL)
+	public function __construct(array $data = NULL, $fountainDto = NULL)
 	{
 		try {
 			if (is_null($data)) {
 				throw new App\Model\InvalidArgumentException("Watch data is missing.");
 			}
 
+			$this->id = $data['id'] ?? NULL;
 			$this->title = $data['title'] ?? NULL;
 			$this->price = $data['price'] ?? NULL;
 			$this->description = $data['description'] ?? NULL;
-			$this->fountainDto = new FountainDTO($data['fountain'] ?? NULL);
+			$this->fountainDto = is_null($fountainDto) ? new FountainDTO($data['fountain'] ?? NULL) : $fountainDto;
 
 			$this->params = [
 				'title'       => $this->title,
@@ -55,7 +56,7 @@ class WatchDTO implements IDTO
 		return $this->title;
 	}
 
-	public function getPrice(): ?integer
+	public function getPrice(): ?int
 	{
 		return $this->price;
 	}
@@ -111,7 +112,7 @@ class WatchDTO implements IDTO
 	private function validatePrice()
 	{
 		$errMsg = "Watch price must be an integer.";
-		if (ctype_digit(strval($this->price))) {
+		if (!ctype_digit(strval($this->price))) {
 			throw new App\Model\InvalidArgumentException($errMsg);
 		}
 		$this->price = intval($this->price);
@@ -133,10 +134,23 @@ class WatchDTO implements IDTO
 	public function serialize(): array
 	{
 		return [
+			'id'          => $this->getId(),
 			'title'       => $this->getTitle(),
 			'price'       => $this->getPrice(),
 			'description' => $this->getDescription(),
 			'fountain'    => $this->getFountainDto()->serialize()
 		];
+	}
+
+	public static function createFromEntity(App\Model\Entity\Watch\Watch $watch)
+	{
+		return new WatchDTO(
+			[
+				'id'          => $watch->getId(),
+				'title'       => $watch->getTitle(),
+				'price'       => $watch->getPrice(),
+				'description' => $watch->getDescription()
+			], FountainDTO::createFromEntity($watch->getFountain())
+		);
 	}
 }

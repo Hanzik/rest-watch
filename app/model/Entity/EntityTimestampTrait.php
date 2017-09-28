@@ -41,24 +41,27 @@ trait EntityTimestampTrait
 	}
 
 	/**
-	 * @param \DateTime $dateModified
-	 *
-	 * @return $this
-	 */
-	public function setDateModified(\DateTime $dateModified)
-	{
-		$this->dateModified = is_null($dateModified) ? new \DateTime : $dateModified;
-		return $this;
-	}
-
-	/**
 	 * @param \DateTime $dateCreated
 	 *
 	 * @return $this
 	 */
-	public function setDateCreated(\DateTime $dateCreated)
+	public function setDateCreated(\DateTime $dateCreated = NULL)
 	{
 		$this->dateCreated = is_null($dateCreated) ? new \DateTime : $dateCreated;
+		$this->setDateModified($dateCreated);
+
+		return $this;
+	}
+
+	/**
+	 * @param \DateTime $dateModified
+	 *
+	 * @return $this
+	 */
+	public function setDateModified(\DateTime $dateModified = NULL)
+	{
+		$this->dateModified = is_null($dateModified) ? new \DateTime : $dateModified;
+
 		return $this;
 	}
 
@@ -70,6 +73,7 @@ trait EntityTimestampTrait
 	public function setDateRemoved(\DateTime $dateRemoved = NULL)
 	{
 		$this->dateRemoved = is_null($dateRemoved) ? new \DateTime : $dateRemoved;
+
 		return $this;
 	}
 }

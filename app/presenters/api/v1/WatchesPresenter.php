@@ -58,12 +58,17 @@ final class WatchesPresenter extends BaseApiPresenter
 		try {
 			$watchDto = new App\Model\DTO\WatchDTO($this->requestBody);
 
-			$this->watchRepository->create($watchDto->getTitle(), $watchDto->getPrice(), $watchDto->getDescription(), $watchDto->getFountainDto());
+			$watch = $this->watchRepository->create($watchDto->getTitle(), $watchDto->getPrice(), $watchDto->getDescription(), $watchDto->getFountainDto());
+
+			$this->getHttpResponse()->setHeader('Location', implode('/', [$this->getHttpRequest()->getUrl(), $watch->getId()]));
+
 			$this->resource->code = Nette\Http\IResponse::S201_CREATED;
+			$this->resource->data = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
 			$this->sendResource(self::CONTENT_TYPE);
 		}
-		catch (\Exception $e) {
+		catch (App\Model\InvalidArgumentException $e) {
 			$this->sendErrorResponse(new Nette\Application\BadRequestException($e->getMessage(), Nette\Http\IResponse::S400_BAD_REQUEST));
+			return;
 		}
 	}
 
