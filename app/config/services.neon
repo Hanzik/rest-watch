@@ -21,3 +21,5 @@ services:
 	decoderXml:
 		class: App\Model\Decoder\XmlDecoder
 		autowired: false
+
+	- App\Model\Filter\WatchFilter

@@ -2,13 +2,17 @@
 
 namespace App\Model\Entity\Watch;
 
+use App;
 use App\Model\Entity;
-use App\Model\DTO;
 use Doctrine;
 use Kdyby\Doctrine\EntityManager;
 
+/**
+ * @property App\Model\Filter\IFilter $filter
+ */
 class WatchRepository
 {
+	use Entity\FilterTrait;
 	use Entity\PaginationTrait;
 
 	/**
@@ -24,11 +28,17 @@ class WatchRepository
 	 */
 	private $watchService;
 
-	public function __construct(EntityManager $em, Entity\Fountain\FountainService $fountainService, WatchService $watchService)
+	public function __construct(
+		EntityManager $em,
+		Entity\Fountain\FountainService $fountainService,
+		WatchService $watchService,
+		App\Model\Filter\WatchFilter $filter
+	)
 	{
 		$this->em = $em;
 		$this->fountainService = $fountainService;
 		$this->watchService = $watchService;
+		$this->filter = $filter;
 	}
 
 	/**
@@ -45,6 +55,7 @@ class WatchRepository
 							  ->from(Watch::class, 'watch')
 							  ->andWhere('watch.id = :id')->setParameter('id', $id)
 							  ->andWhere('watch.dateRemoved IS NULL');
+
 			return $query->getQuery()->getSingleResult();
 		}
 		catch (Doctrine\ORM\NoResultException $e) {
@@ -60,7 +71,7 @@ class WatchRepository
 	 * @return Watch[]
 	 * @throws WatchNotFoundException
 	 */
-	public function findByFilter(array $filter, ?int $page, ?int $perPage)
+	public function findByFilter(array $filter, ?int $page, ?int $perPage): array
 	{
 		try {
 			$query = $this->em->createQueryBuilder()
@@ -68,7 +79,7 @@ class WatchRepository
 							  ->from(Watch::class, 'watch')
 							  ->andWhere('watch.dateRemoved IS NULL');
 
-			// TODO: apply filters
+			$this->applyFilters($query, 'watch', $filter);
 			$this->setPage($query, $page, $perPage);
 
 			return $query->getQuery()->getResult();
@@ -81,7 +92,7 @@ class WatchRepository
 	//////////////////////
 	/// write
 
-	public function create(string $title, int $price, string $description, DTO\FountainDTO $fountainDto)
+	public function create(string $title, int $price, string $description, App\Model\DTO\FountainDTO $fountainDto)
 	{
 		$this->em->beginTransaction();
 		try {
@@ -103,7 +114,7 @@ class WatchRepository
 	}
 
 
-	public function update(string $title, int $price, string $description, DTO\FountainDTO $fountainDto)
+	public function update(string $title, int $price, string $description, App\Model\DTO\FountainDTO $fountainDto)
 	{
 		$this->em->beginTransaction();
 		try {

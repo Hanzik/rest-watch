@@ -62,8 +62,7 @@ final class WatchesPresenter extends BaseApiPresenter
 
 			$this->getHttpResponse()->setHeader('Location', implode('/', [$this->getHttpRequest()->getUrl(), $watch->getId()]));
 
-			$this->resource->code = Nette\Http\IResponse::S201_CREATED;
-			$this->resource->data = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
+			$this->resource->item = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
 			$this->sendResource(self::CONTENT_TYPE);
 		}
 		catch (App\Model\InvalidArgumentException $e) {
@@ -115,17 +114,18 @@ final class WatchesPresenter extends BaseApiPresenter
 			$query = $this->getHttpRequest()->getQuery();
 			$page = $this->getHttpRequest()->getQuery('page', self::DEFAULT_PAGE);
 			$pageSize = $this->getHttpRequest()->getQuery('per_page', self::DEFAULT_PAGE_SIZE);
-			// TODO validate query
 
 			$data = [];
 			foreach ($this->watchRepository->findByFilter($query, $page, $pageSize) as $watch) {
-				$data[] = $watch->serialize();
+				$data[] = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
 			}
-			$this->resource->watches = $data;
+			$this->resource->items = $data;
 		}
 		catch (App\Model\InvalidArgumentException $e) {
 			$this->sendErrorResponse(new Drahak\Restful\Application\BadRequestException('Invalid filter parameter', Nette\Http\IResponse::S400_BAD_REQUEST, $e));
 		}
+
+		$this->sendResource(self::CONTENT_TYPE);
 	}
 
 
@@ -154,11 +154,14 @@ final class WatchesPresenter extends BaseApiPresenter
 	private function readOne(int $id)
 	{
 		try {
-			$this->resource = $this->watchRepository->getById($id)->serialize();
+			$watch = $this->watchRepository->getById($id);
+			$this->resource = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
 		}
 		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
 			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));
 		}
+
+		$this->sendResource(self::CONTENT_TYPE);
 	}
 
 
@@ -189,10 +192,11 @@ final class WatchesPresenter extends BaseApiPresenter
 		try {
 			$watch = $this->watchRepository->getById($id);
 			$this->watchRepository->delete($watch);
-			$this->sendResource(self::CONTENT_TYPE);
 		}
 		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
 			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));
 		}
+
+		$this->sendResource(self::CONTENT_TYPE);
 	}
 }
