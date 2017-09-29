@@ -11,6 +11,7 @@ vendor.phar
 temp/
 www/node_modules
 app/config/config.local.neon
+tests/config.test.local.neon
 tests/php-unix.generated.ini
 composer.phar
 .bash_history

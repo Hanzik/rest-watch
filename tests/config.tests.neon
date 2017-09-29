@@ -1,0 +1,13 @@
+﻿parameters:
+	database:
+		host: mariadb
+		dbname: rest-watch-test
+		user: %ENV.MYSQL_USER%
+		password: %ENV.MYSQL_PASSWORD%
+
+kdyby.doctrine:
+	metadataCache: default
+
+services:
+	certificates:
+		class: App\Mock\Certificates(%appDir%,%tempDir%, ...)
