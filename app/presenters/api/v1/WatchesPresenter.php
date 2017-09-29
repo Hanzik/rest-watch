@@ -66,7 +66,7 @@ final class WatchesPresenter extends BaseApiPresenter
 			$this->getHttpResponse()->setHeader('Location', implode('/', [$this->getHttpRequest()
 																			   ->getUrl(), $watch->getId()]));
 
-			$this->resource->item = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
+			$this->resource = App\Model\DTO\WatchDTO::createFromEntity($watch)->serialize();
 			$this->sendResource(self::CONTENT_TYPE);
 		}
 		catch (App\Model\InvalidArgumentException $e) {
@@ -209,7 +209,7 @@ final class WatchesPresenter extends BaseApiPresenter
 			$updatedWatchDto = new App\Model\DTO\WatchDTO($this->requestBody);
 
 			$updatedWatch = $this->watchRepository->update($updatedWatchDto, $watch);
-			$this->resource->item = App\Model\DTO\WatchDTO::createFromEntity($updatedWatch)->serialize();
+			$this->resource = App\Model\DTO\WatchDTO::createFromEntity($updatedWatch)->serialize();
 			$this->sendResource(self::CONTENT_TYPE);
 		}
 		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
