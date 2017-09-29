@@ -2,17 +2,18 @@
 
 namespace App\Model\Entity\Fountain;
 
+use App;
+
 class FountainService
 {
 	/**
-	 * @param null|string $imageBase64
-	 * @param null|string $color
-	 * @param null|string $height
+	 * @param App\Model\DTO\FountainDTO $fountainDTO
+	 *
 	 * @return Fountain
 	 */
-	public function create(?string $imageBase64, ?string $color, ?string $height)
+	public function create(App\Model\DTO\FountainDTO $fountainDTO)
 	{
-		$fountain = new Fountain($imageBase64, $color, $height);
+		$fountain = new Fountain($fountainDTO->getImageBase64(), $fountainDTO->getColor(), $fountainDTO->getHeight());
 
 		return $fountain;
 	}

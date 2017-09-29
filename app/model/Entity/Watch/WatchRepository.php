@@ -92,12 +92,12 @@ class WatchRepository
 	//////////////////////
 	/// write
 
-	public function create(string $title, int $price, string $description, App\Model\DTO\FountainDTO $fountainDto)
+	public function create(App\Model\DTO\WatchDTO $watchDTO, App\Model\DTO\FountainDTO $fountainDTO)
 	{
 		$this->em->beginTransaction();
 		try {
-			$fountain = $this->fountainService->create($fountainDto->getImageBase64(), $fountainDto->getColor(), $fountainDto->getHeight());
-			$watch = $this->watchService->create($title, $price, $description, $fountain);
+			$fountain = $this->fountainService->create($fountainDTO);
+			$watch = $this->watchService->create($watchDTO, $fountain);
 
 			$this->em->persist($fountain);
 			$this->em->persist($watch);
@@ -113,15 +113,12 @@ class WatchRepository
 		}
 	}
 
-
-	public function update(string $title, int $price, string $description, App\Model\DTO\FountainDTO $fountainDto)
+	public function update(App\Model\DTO\WatchDTO $updatedWatch, Watch $oldWatch)
 	{
 		$this->em->beginTransaction();
 		try {
-			$fountain = $this->fountainService->create($fountainDto->getImageBase64(), $fountainDto->getColor(), $fountainDto->getHeight());
-			$watch = $this->watchService->create($title, $price, $description, $fountain);
+			$watch = $this->watchService->update($updatedWatch, $oldWatch);
 
-			$this->em->persist($fountain);
 			$this->em->persist($watch);
 			$this->em->flush();
 

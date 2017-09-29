@@ -87,7 +87,7 @@ class Watch
 		return $this->price;
 	}
 
-	public function setTitle(string $title): string
+	public function setTitle(string $title): Watch
 	{
 		$this->title = $title;
 

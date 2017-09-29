@@ -32,6 +32,7 @@ class RouterFactory extends Nette\Application\Routers\RouteList
 		/** Watch resource */
 		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches[/<id>]', 'Watches', Restful\Application\IResourceRouter::GET);
 		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches', 'Watches', Restful\Application\IResourceRouter::POST);
+		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches/<id>', 'Watches', Restful\Application\IResourceRouter::PUT);
 		$api[] = new Restful\Application\Routes\CrudRoute($this->rootPath . '/api/v1/watches/<id>', 'Watches', Restful\Application\IResourceRouter::DELETE);
 	}
 }
