@@ -160,4 +160,39 @@ final class WatchesPresenter extends BaseApiPresenter
 			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));
 		}
 	}
+
+
+	/**
+	 * @SWG\Delete(path="/watches/{id}",
+	 *   tags={"watches"},
+	 *   summary="Deletes watch with given id",
+	 *   description="Deletes watch with given identifier.",
+	 *   operationId="deleteOneWatch",
+	 *   produces={"application/json"},
+	 *   @SWG\Parameter(
+	 *     paramType="path",
+	 *     name="id",
+	 *     description="Watch unique identifier.",
+	 *     required=true,
+	 *     type="integer"
+	 *   ),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
+	 *                                 expected."),
+	 *   @SWG\Response(response="404", description="Item with given identifier does not exist.")
+	 * )
+	 * @param $id
+	 *
+	 * @return array
+	 */
+	public function actionDelete(int $id)
+	{
+		try {
+			$watch = $this->watchRepository->getById($id);
+			$this->watchRepository->delete($watch);
+			$this->sendResource(self::CONTENT_TYPE);
+		}
+		catch (App\Model\Entity\Watch\WatchNotFoundException $e) {
+			$this->sendErrorResponse(Drahak\Restful\Application\BadRequestException::notFound('Watch not found'));
+		}
+	}
 }

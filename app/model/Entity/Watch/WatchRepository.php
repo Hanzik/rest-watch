@@ -44,12 +44,11 @@ class WatchRepository
 							  ->select('watch')
 							  ->from(Watch::class, 'watch')
 							  ->andWhere('watch.id = :id')->setParameter('id', $id)
-							  ->andWhere('watch.dateRemoved IS NOT NULL');
-
+							  ->andWhere('watch.dateRemoved IS NULL');
 			return $query->getQuery()->getSingleResult();
 		}
 		catch (Doctrine\ORM\NoResultException $e) {
-			throw new WatchNotFoundException($id, $e);
+			throw new WatchNotFoundException;
 		}
 	}
 
@@ -67,7 +66,7 @@ class WatchRepository
 			$query = $this->em->createQueryBuilder()
 							  ->select('watch')
 							  ->from(Watch::class, 'watch')
-							  ->andWhere('watch.dateRemoved IS NOT NULL');
+							  ->andWhere('watch.dateRemoved IS NULL');
 
 			// TODO: apply filters
 			$this->setPage($query, $page, $perPage);
