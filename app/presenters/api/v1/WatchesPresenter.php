@@ -21,35 +21,38 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="createWatch",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="title",
 	 *     description="Watch title (required)",
 	 *     required=true,
-	 *     type="string"
+	 *     type="string",
+	 *     @SWG\Schema(type="string")
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="price",
 	 *     description="Watch integer price (required)",
 	 *     required=true,
-	 *     type="integer"
+	 *     type="integer",
+	 *         @SWG\Schema(type="integer")
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="description",
 	 *     description="Watch description (required)",
 	 *     required=true,
-	 *     type="string"
+	 *     type="string",
+	 *     @SWG\Schema(type="string")
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="fountain",
 	 *     description="Fountain - either an object with parameters color and height or a string (image in base64)",
 	 *     required=true,
-	 *     type="object"
+	 *     type="object",
+	 *     @SWG\Schema(type="object")
 	 *   ),
-	 *   @SWG\Response(response="201", description="All necessary fields were provided and watch was successfully
-	 *                                 created."),
+	 *   @SWG\Response(response="201", description="Required fields were provided, watch was successfully created."),
 	 *   @SWG\Response(response="400", description="Malformed syntax or some required parameters were not provided.")
 	 * )
 	 */
@@ -90,21 +93,20 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="readAllWatches",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     paramType="query",
+	 *     in="query",
 	 *     name="page",
 	 *     description="Displayed page of the watch list. If the page is out of range, empty array will be returned.",
 	 *     required=false,
 	 *     type="integer"
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="query",
+	 *     in="query",
 	 *     name="per_page",
 	 *     description="Items per page. This parameter works only when 'page' parameter is also included.",
 	 *     required=false,
 	 *     type="integer"
 	 *   ),
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
-	 *                                 expected."),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can be expected."),
 	 *   @SWG\Response(response="400", description="One or more filter parameters are not in correct format.")
 	 * )
 	 */
@@ -136,14 +138,13 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="readOneWatch",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     paramType="path",
+	 *     in="path",
 	 *     name="id",
 	 *     description="Watch unique identifier.",
 	 *     required=true,
 	 *     type="integer"
 	 *   ),
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
-	 *                                 expected."),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can be expected."),
 	 *   @SWG\Response(response="404", description="Item with given identifier does not exist.")
 	 * )
 	 * @param $id
@@ -170,28 +171,30 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="updateOneWatch",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="title",
 	 *     description="Watch title",
 	 *     required=false,
-	 *     type="string"
+	 *     type="string",
+	 *     @SWG\Schema(type="string")
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="price",
 	 *     description="Watch integer price",
 	 *     required=false,
-	 *     type="integer"
+	 *     type="integer",
+	 *     @SWG\Schema(type="integer")
 	 *   ),
 	 *   @SWG\Parameter(
-	 *     paramType="body",
+	 *     in="body",
 	 *     name="description",
 	 *     description="Watch description",
 	 *     required=false,
-	 *     type="string"
+	 *     type="string",
+	 *     @SWG\Schema(type="string")
 	 *   ),
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
-	 *                                 expected."),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can be expected."),
 	 *   @SWG\Response(response="404", description="Item with given identifier does not exist.")
 	 * )
 	 * @param $id
@@ -225,14 +228,13 @@ final class WatchesPresenter extends BaseApiPresenter
 	 *   operationId="deleteOneWatch",
 	 *   produces={"application/json"},
 	 *   @SWG\Parameter(
-	 *     paramType="path",
+	 *     in="path",
 	 *     name="id",
 	 *     description="Watch unique identifier.",
 	 *     required=true,
 	 *     type="integer"
 	 *   ),
-	 *   @SWG\Response(response="200", description="With valid request provided, this response code can always be
-	 *                                 expected."),
+	 *   @SWG\Response(response="200", description="With valid request provided, this response code can be expected."),
 	 *   @SWG\Response(response="404", description="Item with given identifier does not exist.")
 	 * )
 	 * @param $id

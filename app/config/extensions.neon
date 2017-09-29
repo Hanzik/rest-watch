@@ -107,7 +107,9 @@ kdyby.annotations:
         - doc
         - SWG\Swagger
         - SWG\Info
+        - SWG\Schema
         - SWG\Contact
+        - SWG\Parameter
         - SWG\ExternalDocumentation
 
 drahak.restful:
